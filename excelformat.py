@@ -1,6 +1,7 @@
 import pandas as pd
 import tkinter as tk
 import re
+import xlsxwriter #removable - was supposed to work w duplicate column names but cant do that bc styling
 from tkinter import filedialog
 #must pip install: pandas, tkinter, and jinja2
 
@@ -24,6 +25,18 @@ class BehaviorObject:
 			self.isDigging = isDigging
 			self.hasApproached = hasApproached
 			self.trial = trial
+
+#This stores simple counts of all behaviors, for statistics
+class StatsObject:
+	def __init__(self):
+		self.t = 0
+		self.l = 0
+		self.r = 0
+		self.v = 0
+		self.e = 0
+		self.cd = 0
+		self.id = 0
+
 #Formats first and last given row indices within Dataframe, at column "Behavior" with given label
 #Returns list of indices to drop (only keeping the first and last dig indices)
 def formatDigs(df, indices, label):
@@ -63,19 +76,27 @@ def dig_correctness(df, mouse, sense):
 
 #Highlights a Dataframe row based on the behavior of that row
 def highlight(s):
+	print(len(s))
 	match s.Behavior:
 		case "TrialStart":
-			return ['color: #4472C4'] * (len(s)-1) + ['color: black']
+			styleList = ['color: #4472C4'] * (len(s)-1) + ['color: black']
 		case "ApproachRight":
-			return ['color: #C65911'] * (len(s)-1) + ['color: black']
+			styleList =  ['color: #C65911'] * (len(s)-1) + ['color: black']
 		case "ApproachLeft":
-			return ['color: #C65911'] * (len(s)-1) + ['color: black']
+			styleList =  ['color: #C65911'] * (len(s)-1) + ['color: black']
 		case "CorrectDig":
-			return ['color: #FF0000'] * (len(s)-1) + ['color: black']
+			styleList =  ['color: #FF0000'] * (len(s)-1) + ['color: black']
 		case "IncorrectDig":
-			return ['color: #548235'] * (len(s)-1) + ['color: black']
+			styleList =  ['color: #548235'] * (len(s)-1) + ['color: black']
 		case _:
-			return ['color: black'] * len(s)
+			styleList =  ['color: black'] * len(s)
+	#Should work in theory but does not
+	# if((s.name < 8) and (0 < s.name)):
+	# 	#print("doing thing, len = " + str(len(styleList)))
+	# 	del styleList[5:9]
+	# 	styleList.extend(['background-color: green'] for i in range(4))
+	# 	#print("after our thing, len" + str(len(styleList)))
+	return styleList
 
 #to make non-hardcoded just swap which one is commented
 filepath = "C:/Users/Adam/Desktop/Aster/Neurolab_Scripts/A005_IDS_tab_new_corrected.xlsx" #HARDCODED FILEPATH
@@ -151,9 +172,11 @@ except Exception as err:
 	print(f"Unexpected {err=}, {type(err)=}")
 	exit()
 
-print("testing for " + str(senses.testing) +  " correct:" + str(senses.correct))
+#print("testing for " + str(senses.testing) +  " correct:" + str(senses.correct))
+
 #mouse is not digging and has not approached a side, and is at trial 0
 mouse = BehaviorObject(False, "", 0)
+stats = StatsObject();
 
 # ========== Iterate Through Raw File ========== #
 
@@ -163,31 +186,38 @@ for index, row in RawDF.iterrows():
 	rawBehavior = row["Behavior"]
 	match rawBehavior:
 		case "t":
-			#Increment trial every time we see a new trial
+			stats.t += 1
 			mouse.trial += 1
 			behavior = "TrialStart"
 		case "l":
+			stats.l += 1
 			behavior = "ApproachLeft"
 			mouse.hasApproached = "Left"
 		case "r":
+			stats.r += 1
 			behavior = "ApproachRight"
 			mouse.hasApproached = "Right"
 		case "v":
+			stats.v += 1
 			behavior = "Leave"
 			#If we were just digging, we need to check the setup to determine
 			if mouse.isDigging:
 				if (dig_correctness(SetupDF, mouse, senses)):
 					drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "CorrectDig"))
+					stats.cd += 1
 				else:
 					drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "IncorrectDig"))
+					stats.id += 1
 				mouse.isDigging = False
 				dig_row_indices = []
 		case "e":
+			stats.e += 1
 			behavior = "Eat"
 			#If we were just digging, label all prev digs as correct
 			if mouse.isDigging:
 				#format our digs, adding extras to the drop list
 				drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "CorrectDig"))
+				stats.cd += 1
 				#Reset digging status and indices
 				mouse.isDigging = False
 				dig_row_indices = []
@@ -209,12 +239,29 @@ for index, row in RawDF.iterrows():
 #Drop all of our tracked duplicate dig indices
 BehaviorDF = BehaviorDF.drop(labels=drop_indices, axis=0)
 
+# BehaviorDF = BehaviorDF.insert(5, "", ["","TrialStart","ApproachRight",
+# 		"ApproachLeft","CorrectDig","IncorrectDig","Eat","Leave"])
+
+stats = pd.concat([pd.Series([""]),
+	pd.Series(["","TrialStart","ApproachRight","ApproachLeft",
+	"CorrectDig","IncorrectDig","Eat","Leave"]),
+	pd.Series(["", stats.t, stats.r, stats.l, stats.cd,
+		stats.id, (stats.e//2), stats.v]),
+	pd.Series(["","","Approach","","Dig"]),
+	pd.Series(["","",(stats.l+stats.r),"",(stats.cd+stats.id)])],
+ 		axis=1)
+stats.rename(columns={0: "",1: "NamesA",2: "StatsA",3:"NamesB", 4:"StatsB"}, inplace=True)
+#stats.rename(columns={3: "",1: ""}, inplace=True)
+print(stats)
+# BehaviorDF[""] = pd.Series(["","TrialStart","ApproachRight",
+#  		"ApproachLeft","CorrectDig","IncorrectDig","Eat","Leave"])
+BehaviorDF	= pd.concat([BehaviorDF, stats], axis=1)
 #Apply the highlight to our dataframe rows
 BehaviorDF = BehaviorDF.style.apply(highlight, axis=1)
 
 #Use ExcelWriter to write
-with pd.ExcelWriter('ScriptOutput.xlsx') as writer:
-	BehaviorDF.to_excel(writer, sheet_name='Behavior', index=False);
+with pd.ExcelWriter('ScriptOutput.xlsx', engine='xlsxwriter') as writer:
+	BehaviorDF.to_excel(writer, sheet_name='Behavior 4D', index=False);
 	#Add more sheets to write here!
 
 print("Program finished")
