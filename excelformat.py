@@ -65,15 +65,15 @@ def dig_correctness(df, mouse, sense):
 def highlight(s):
 	match s.Behavior:
 		case "TrialStart":
-			return ['color: #4472C4'] * len(s)
+			return ['color: #4472C4'] * (len(s)-1) + ['color: black']
 		case "ApproachRight":
-			return ['color: #C65911'] * len(s)
+			return ['color: #C65911'] * (len(s)-1) + ['color: black']
 		case "ApproachLeft":
-			return ['color: #C65911'] * len(s)
+			return ['color: #C65911'] * (len(s)-1) + ['color: black']
 		case "CorrectDig":
-			return ['color: #FF0000'] * len(s)
+			return ['color: #FF0000'] * (len(s)-1) + ['color: black']
 		case "IncorrectDig":
-			return ['color: #548235'] * len(s)
+			return ['color: #548235'] * (len(s)-1) + ['color: black']
 		case _:
 			return ['color: black'] * len(s)
 
