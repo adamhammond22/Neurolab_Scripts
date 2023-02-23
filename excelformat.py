@@ -1,11 +1,14 @@
 import pandas as pd
 import tkinter as tk
-import re
 from tkinter import filedialog
 
 #from classes import *
+import re
 #from helperfunctions import *
+from classes import SensesObject
+from helperfunctions import highlight
 from createBehaviorDF import createBehaviorDF
+from createBehavior4D_DF import createBehavior4D_DF
 
 #must pip install: pandas, tkinter, and jinja2
 
@@ -69,13 +72,36 @@ if(len(trows) != setupTrials["Trial"]):
 	print("Fatal Error: Setup Trials and Raw 't' count do not match.")
 	exit()
 
+# ========== CREATE Sense Object ========== #
+#Determine the sense we're testing for
+try:
+	CorrTexture = SetupDF.at[0, "CorrTexture"]
+	print(str(CorrTexture))
+	#If CorrTexture is n/a, then we're testing for odor
+	if (re.search("^[nN]/*[aA]$", str(CorrTexture))):
+		senses = SensesObject("odor", SetupDF.at[0, "CorrOdor"])
+	#Otherwise we're testing for texture
+	else:
+		senses = SensesObject("texture", CorrTexture)
+except Exception as err:
+	print("Fatal Error: Failed parsing CorrTexture or CorrOdor in 'Setup' sheet.")
+	print(f"Unexpected {err=}, {type(err)=}")
+	exit()
+
 
 # ========== CREATE Behavior DF ========== #
-BehaviorDF = createBehaviorDF(RawDF, SetupDF)
+BehaviorDF = createBehaviorDF(RawDF, SetupDF, senses)
+
+# ========== CREATE Behavior 4D DF ========== #
+Behavior4D_DF = createBehavior4D_DF(BehaviorDF, SetupDF, senses)
+
+# ========== Apply Highlighting ========== #
+BehaviorDF = BehaviorDF.style.apply(highlight, axis=1)
 
 #Use ExcelWriter to write
 with pd.ExcelWriter('ScriptOutput.xlsx') as writer:
-	BehaviorDF.to_excel(writer, sheet_name='Behavior 4D', index=False);
+	BehaviorDF.to_excel(writer, sheet_name='Behavior', index=False);
+	Behavior4D_DF.to_excel(writer, sheet_name='Behavior 4D', index=False);
 	RawDF.to_excel(writer, sheet_name='Raw', index=False);
 	#Add more sheets to write here!
 

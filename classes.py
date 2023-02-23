@@ -5,9 +5,8 @@ class SensesObject:
 			self.correct = correct
 #This stores current behavior like digging, approached, and sense
 class BehaviorObject:
-	def __init__(self, isDigging, hasApproached, trial):
-			self.isDigging = isDigging
-			self.hasApproached = hasApproached
+	def __init__(self, Approached, trial):
+			self.Approached = Approached
 			self.trial = trial
 
 #This stores simple counts of all behaviors, for statistics

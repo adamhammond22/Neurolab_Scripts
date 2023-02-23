@@ -13,8 +13,7 @@ def formatDigs(df, indices, label):
 	#return remaining indices to drop
 	return(indices)
 
-def dig_correctness(df, mouse, sense):
-	#print("beginning dig correctness, testing for" + str(sense.testing))
+def dig_leave_correctness(df, mouse, sense):
 	#If we're testing for texture
 	if(sense.testing == "texture"):
 		CurrentLeftSense = df.at[mouse.trial-1, "L_Texture"]
@@ -25,15 +24,11 @@ def dig_correctness(df, mouse, sense):
 	#If Left sense is the correct sense
 	if(CurrentLeftSense == sense.correct):
 		#return true if we approached left
-		#print("Left sense was correct, we aproeached" + mouse.hasApproached)
-		#print("Returning" + str(bool(mouse.hasApproached == "Left")))
-		return bool(mouse.hasApproached == "Left")
+		return bool(mouse.Approached == "Left")
 	#If Right sense is the correct sense
 	else:
 		#return true if we approached right
-		#print("Right sense was correct, we aproeached" + mouse.hasApproached)
-		#print("Returning" + str(bool(mouse.hasApproached == "Right")))
-		return bool(mouse.hasApproached == "Right")
+		return bool(mouse.Approached == "Right")
 
 #Highlights a Dataframe row based on the behavior of that row
 def highlight(s):
@@ -57,4 +52,3 @@ def highlight(s):
 		del styleList[5:9]
 		styleList = styleList + ['background-color: #C6E0B4']*4
 	return styleList
-
