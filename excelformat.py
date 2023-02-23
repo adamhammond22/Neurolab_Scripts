@@ -1,8 +1,11 @@
 import pandas as pd
 import tkinter as tk
 import re
-import xlsxwriter #removable - was supposed to work w duplicate column names but cant do that bc styling
 from tkinter import filedialog
+
+from classes import *
+from helperfunctions import *
+
 #must pip install: pandas, tkinter, and jinja2
 
 # ====== user selection window ====== #
@@ -14,89 +17,6 @@ root.withdraw() #Hide root window
 #File->Info->CheckForIssues->InspectDocument(for headers/footers)->Remove header and footer
 #I've done this once and it does not impact the program
 
-#This stores test and correct sense that we're testing for
-class SensesObject:
-	def __init__(self, testing, correct):
-			self.testing = testing
-			self.correct = correct
-#This stores current behavior like digging, approached, and sense
-class BehaviorObject:
-	def __init__(self, isDigging, hasApproached, trial):
-			self.isDigging = isDigging
-			self.hasApproached = hasApproached
-			self.trial = trial
-
-#This stores simple counts of all behaviors, for statistics
-class StatsObject:
-	def __init__(self):
-		self.t = 0
-		self.l = 0
-		self.r = 0
-		self.v = 0
-		self.e = 0
-		self.cd = 0
-		self.id = 0
-
-#Formats first and last given row indices within Dataframe, at column "Behavior" with given label
-#Returns list of indices to drop (only keeping the first and last dig indices)
-def formatDigs(df, indices, label):
-	#Grab first row off of indices and set as label
-	firstrow = indices.pop(0)
-	df.iat[firstrow,1] = label
-	
-	if (len(indices) > 0): # if theres another element		
-		#Grab last row off of indices and set label
-		lastrow = indices.pop(len(indices)-1)
-		df.iat[lastrow,1] = label
-
-	#return remaining indices to drop
-	return(indices)
-
-def dig_correctness(df, mouse, sense):
-	#print("beginning dig correctness, testing for" + str(sense.testing))
-	#If we're testing for texture
-	if(sense.testing == "texture"):
-		CurrentLeftSense = df.at[mouse.trial-1, "L_Texture"]
-	#Otherwise if we're testing for odor
-	else:
-		CurrentLeftSense = df.at[mouse.trial-1, "L_Odor"]
-
-	#If Left sense is the correct sense
-	if(CurrentLeftSense == sense.correct):
-		#return true if we approached left
-		#print("Left sense was correct, we aproeached" + mouse.hasApproached)
-		#print("Returning" + str(bool(mouse.hasApproached == "Left")))
-		return bool(mouse.hasApproached == "Left")
-	#If Right sense is the correct sense
-	else:
-		#return true if we approached right
-		#print("Right sense was correct, we aproeached" + mouse.hasApproached)
-		#print("Returning" + str(bool(mouse.hasApproached == "Right")))
-		return bool(mouse.hasApproached == "Right")
-
-#Highlights a Dataframe row based on the behavior of that row
-def highlight(s):
-	print(len(s))
-	match s.Behavior:
-		case "TrialStart":
-			styleList = ['color: #4472C4'] * (len(s)-1) + ['color: black']
-		case "ApproachRight":
-			styleList =  ['color: #C65911'] * (len(s)-1) + ['color: black']
-		case "ApproachLeft":
-			styleList =  ['color: #C65911'] * (len(s)-1) + ['color: black']
-		case "CorrectDig":
-			styleList =  ['color: #FF0000'] * (len(s)-1) + ['color: black']
-		case "IncorrectDig":
-			styleList =  ['color: #548235'] * (len(s)-1) + ['color: black']
-		case _:
-			styleList =  ['color: black'] * len(s)
-	#Should work in theory but does not
-	# if((s.name < 8) and (0 < s.name)):
-	# 	#print("doing thing, len = " + str(len(styleList)))
-	# 	del styleList[5:9]
-	# 	styleList.extend(['background-color: green'] for i in range(4))
-	# 	#print("after our thing, len" + str(len(styleList)))
-	return styleList
 
 #to make non-hardcoded just swap which one is commented
 filepath = "C:/Users/Adam/Desktop/Aster/Neurolab_Scripts/A005_IDS_tab_new_corrected.xlsx" #HARDCODED FILEPATH
@@ -150,9 +70,10 @@ if(len(trows) != setupTrials["Trial"]):
 
 # ========== Init Variables and Objects ========== #
 
+# ========== CREATE Behavior DF ========== #
+
 #Initalize output dataframe for "Behavior" sheet
 BehaviorDF = pd.DataFrame(columns=["Time", "Behavior", "Behavior type", "Trial"])
-
 
 dig_row_indices = [] #List of indices from most recent digs
 drop_indices = [] # List of all indices to drop
@@ -177,8 +98,6 @@ except Exception as err:
 #mouse is not digging and has not approached a side, and is at trial 0
 mouse = BehaviorObject(False, "", 0)
 stats = StatsObject();
-
-# ========== Iterate Through Raw File ========== #
 
 #Iterate over all rows in Raw Dataframe
 for index, row in RawDF.iterrows():
@@ -239,9 +158,7 @@ for index, row in RawDF.iterrows():
 #Drop all of our tracked duplicate dig indices
 BehaviorDF = BehaviorDF.drop(labels=drop_indices, axis=0)
 
-# BehaviorDF = BehaviorDF.insert(5, "", ["","TrialStart","ApproachRight",
-# 		"ApproachLeft","CorrectDig","IncorrectDig","Eat","Leave"])
-
+# ========== Add basic statistics to Behavior Sheet ========== #
 stats = pd.concat([pd.Series([""]),
 	pd.Series(["","TrialStart","ApproachRight","ApproachLeft",
 	"CorrectDig","IncorrectDig","Eat","Leave"]),
@@ -250,18 +167,18 @@ stats = pd.concat([pd.Series([""]),
 	pd.Series(["","","Approach","","Dig"]),
 	pd.Series(["","",(stats.l+stats.r),"",(stats.cd+stats.id)])],
  		axis=1)
-stats.rename(columns={0: "",1: "NamesA",2: "StatsA",3:"NamesB", 4:"StatsB"}, inplace=True)
+#stats.rename(columns={0: "",1: "NamesA",2: "StatsA",3:"NamesB", 4:"StatsB"}, inplace=True)
 #stats.rename(columns={3: "",1: ""}, inplace=True)
-print(stats)
-# BehaviorDF[""] = pd.Series(["","TrialStart","ApproachRight",
-#  		"ApproachLeft","CorrectDig","IncorrectDig","Eat","Leave"])
 BehaviorDF	= pd.concat([BehaviorDF, stats], axis=1)
-#Apply the highlight to our dataframe rows
+
+
+# ========== Apply Highlighting ========== #
 BehaviorDF = BehaviorDF.style.apply(highlight, axis=1)
 
 #Use ExcelWriter to write
-with pd.ExcelWriter('ScriptOutput.xlsx', engine='xlsxwriter') as writer:
+with pd.ExcelWriter('ScriptOutput.xlsx') as writer:
 	BehaviorDF.to_excel(writer, sheet_name='Behavior 4D', index=False);
+	RawDF.to_excel(writer, sheet_name='Raw', index=False);
 	#Add more sheets to write here!
 
 print("Program finished")
