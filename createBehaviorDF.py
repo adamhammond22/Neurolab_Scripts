@@ -2,7 +2,7 @@ import pandas as pd
 import re
 
 from classes import SensesObject, BehaviorObject, StatsObject
-from helperfunctions import formatDigs, dig_leave_correctness
+from helperfunctions import formatDigs, dig_correctness
 
 #must pip install: pandas, tkinter, and jinja2
 
@@ -34,17 +34,17 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 			case "l":
 				stats.l += 1
 				behavior = "ApproachLeft"
-				mouse.Approached = "Left"
+				mouse.Approached = behavior
 			case "r":
 				stats.r += 1
 				behavior = "ApproachRight"
-				mouse.Approached = "Right"
+				mouse.Approached = behavior
 			case "v":
 				stats.v += 1
 				behavior = "Leave"
 				#If we were just digging, we need to check the setup to determine
 				if isDigging:
-					if (dig_leave_correctness(SetupDF, mouse, senses)):
+					if (dig_correctness(SetupDF, mouse, senses)):
 						drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "CorrectDig"))
 						stats.cd += 1
 					else:

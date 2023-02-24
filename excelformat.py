@@ -6,9 +6,9 @@ from tkinter import filedialog
 import re
 #from helperfunctions import *
 from classes import SensesObject
-from helperfunctions import highlight
+from helperfunctions import highlightBehaviorDF, highlightDecisionTimeDF
 from createBehaviorDF import createBehaviorDF
-from createBehavior4D_DF import createBehavior4D_DF
+from createDecisionTimeDF import createDecisionTimeDF
 
 #must pip install: pandas, tkinter, and jinja2
 
@@ -76,7 +76,6 @@ if(len(trows) != setupTrials["Trial"]):
 #Determine the sense we're testing for
 try:
 	CorrTexture = SetupDF.at[0, "CorrTexture"]
-	print(str(CorrTexture))
 	#If CorrTexture is n/a, then we're testing for odor
 	if (re.search("^[nN]/*[aA]$", str(CorrTexture))):
 		senses = SensesObject("odor", SetupDF.at[0, "CorrOdor"])
@@ -93,16 +92,19 @@ except Exception as err:
 BehaviorDF = createBehaviorDF(RawDF, SetupDF, senses)
 
 # ========== CREATE Behavior 4D DF ========== #
-Behavior4D_DF = createBehavior4D_DF(BehaviorDF, SetupDF, senses)
+DecisionTimeDF = createDecisionTimeDF(BehaviorDF, SetupDF, senses)
 
 # ========== Apply Highlighting ========== #
-BehaviorDF = BehaviorDF.style.apply(highlight, axis=1)
+
+BehaviorDF = BehaviorDF.style.apply(highlightBehaviorDF, axis=1)
+DecisionTimeDF = DecisionTimeDF.style.apply(highlightDecisionTimeDF, axis=1)
 
 #Use ExcelWriter to write
 with pd.ExcelWriter('ScriptOutput.xlsx') as writer:
 	BehaviorDF.to_excel(writer, sheet_name='Behavior', index=False);
-	Behavior4D_DF.to_excel(writer, sheet_name='Behavior 4D', index=False);
+	DecisionTimeDF.to_excel(writer, sheet_name='Decision Time', index=False);
 	RawDF.to_excel(writer, sheet_name='Raw', index=False);
+	SetupDF.to_excel(writer, sheet_name='Setup', index=False);
 	#Add more sheets to write here!
 
-print("Program finished")
+print("Program Completed")

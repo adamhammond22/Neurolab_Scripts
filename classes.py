@@ -20,3 +20,4 @@ class StatsObject:
 		self.cd = 0
 		self.id = 0
 
+
