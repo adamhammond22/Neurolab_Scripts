@@ -1,29 +1,28 @@
-import pandas as pd
-import tkinter as tk
+import pandas as pd #pandas for excel sheets and dataframes
+import tkinter as tk #tk for file dialog (requires Jinja2!!!)
 from tkinter import filedialog
+import re #regex
 
-#from classes import *
-import re
-#from helperfunctions import *
 from classes import SensesObject
 from helperfunctions import highlightBehaviorDF, highlightDecisionTimeDF
 from createBehaviorDF import createBehaviorDF
 from createDecisionTimeDF import createDecisionTimeDF
 
 #must pip install: pandas, tkinter, and jinja2
+#or pip install -r requirements.txt
 
 # ====== user selection window ====== #
 root = tk.Tk()
 root.withdraw() #Hide root window
 
 #"Warning: could not parse header or footer"
-#Benign issue- to remove: go to excel on the offending file.
+#This is a benign issue- to remove: go to excel on the offending file.
 #File->Info->CheckForIssues->InspectDocument(for headers/footers)->Remove header and footer
-#I've done this once and it does not impact the program
 
 
-#to make non-hardcoded just swap which one is commented
-#filepath = "C:/Users/Adam/Desktop/Aster/Neurolab_Scripts/A005_IDS_tab_new_corrected.xlsx" #HARDCODED FILEPATH
+#HARDCODED FILEPATH
+#filepath = "C:/Users/Adam/Desktop/Aster/Neurolab_Scripts/A005_IDS_tab_new_corrected.xlsx"
+#Filepath Determined by tk dialog
 filepath = filedialog.askopenfilename()
 
 # ========== Try reading file into input dataframes ========== #
