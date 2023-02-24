@@ -10,7 +10,7 @@ class BehaviorObject:
 			self.trial = trial
 
 #This stores simple counts of all behaviors, for statistics
-class StatsObject:
+class BehaviorStatsObject:
 	def __init__(self):
 		self.t = 0
 		self.l = 0
@@ -21,3 +21,10 @@ class StatsObject:
 		self.id = 0
 
 
+#This stores simple counts of all decision times, for statistics
+class DecisionStatsObject:
+	def __init__(self):
+		self.cd = 0
+		self.id = 0
+		self.cr = 0
+		self.ms = 0

@@ -23,8 +23,8 @@ root.withdraw() #Hide root window
 
 
 #to make non-hardcoded just swap which one is commented
-filepath = "C:/Users/Adam/Desktop/Aster/Neurolab_Scripts/A005_IDS_tab_new_corrected.xlsx" #HARDCODED FILEPATH
-#filepath = filedialog.askopenfilename()
+#filepath = "C:/Users/Adam/Desktop/Aster/Neurolab_Scripts/A005_IDS_tab_new_corrected.xlsx" #HARDCODED FILEPATH
+filepath = filedialog.askopenfilename()
 
 # ========== Try reading file into input dataframes ========== #
 if not filepath:
@@ -101,10 +101,10 @@ DecisionTimeDF = DecisionTimeDF.style.apply(highlightDecisionTimeDF, axis=1)
 
 #Use ExcelWriter to write
 with pd.ExcelWriter('ScriptOutput.xlsx') as writer:
-	BehaviorDF.to_excel(writer, sheet_name='Behavior', index=False);
-	DecisionTimeDF.to_excel(writer, sheet_name='Decision Time', index=False);
 	RawDF.to_excel(writer, sheet_name='Raw', index=False);
 	SetupDF.to_excel(writer, sheet_name='Setup', index=False);
+	BehaviorDF.to_excel(writer, sheet_name='Behavior', index=False);
+	DecisionTimeDF.to_excel(writer, sheet_name='Decision Time', index=False);
 	#Add more sheets to write here!
 
 print("Program Completed")

@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-from classes import SensesObject, BehaviorObject, StatsObject
+from classes import SensesObject, BehaviorObject, BehaviorStatsObject
 from helperfunctions import formatDigs, dig_correctness
 
 #must pip install: pandas, tkinter, and jinja2
@@ -20,7 +20,7 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 	#Obj to pass to correctness function with approach direction and trial
 	mouse = BehaviorObject("", 0)
 	isDigging = False
-	stats = StatsObject();
+	stats = BehaviorStatsObject();
 	
 	#Iterate over all rows in Raw Dataframe
 	for index, row in RawDF.iterrows():
