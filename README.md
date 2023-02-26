@@ -20,6 +20,9 @@ reguarding the projects.
 
 6 - requirements.txt - Stores all python libraries for which this program is dependant on.
 
+7 - LICENSE - GNU General Public License v3. Anyone is allowed to use it for free, it can be redistributed as long as I get credit and it's made free.
+
+
 ## First Time Installation:
 
 ### Windows:
