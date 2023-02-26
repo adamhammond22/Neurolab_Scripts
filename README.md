@@ -107,13 +107,7 @@ Formats said file to specificaion. Outputs to file ScriptOutput.xlsx
 
 ### To Do:
 
-[ ] regex to file names for raw and setup. maybe make 100_something?
-
-[ ] algorithmically calculate and display correct and incorrect digs 
-
-[ ] remove duplicate incorrect digs (only count first and last)
-
-[ ] calculate avg, std, other statistics
-
+[ ] Implement a graphing utility
+[ ] More statistics!
 [ ] make python auto-download required libraries for ease of use: maybe a .bat file?
 
