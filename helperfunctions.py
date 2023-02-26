@@ -13,6 +13,14 @@ def formatDigs(df, indices, label):
 	#return remaining indices to drop
 	return(indices)
 
+
+#Determines the correctness of a dig given the setup df, mouse obj, and senses obj.
+#We find the sense we're looking for, and determine if sense is on right or left.
+#Then we return if the mouse approached from that direction.
+#Returns True if dig is correct
+#
+#Taking the negation of this output gives the Leave correctness, because if a 
+#dig is correct, then leaving was an incorrect rejection.
 def dig_correctness(df, mouse, sense):
 	#If we're testing for texture
 	if(sense.testing == "texture"):
@@ -29,7 +37,8 @@ def dig_correctness(df, mouse, sense):
 		#return true if we approached right
 		return bool(mouse.Approached == "ApproachRight")
 
-#Highlights a Dataframe row based on the behavior of that row
+#Returns a list of highlight colors for the Behavior Dataframe
+#based on the behavior of that row. This is applied to each row of thre DF in style.apply()
 def highlightBehaviorDF(s):
 	#Highlight row based on behavior
 	match s.Behavior:
@@ -47,14 +56,18 @@ def highlightBehaviorDF(s):
 			styleList =  ['color: black'] * len(s)
 	
 	#Add Green highlight to stats box
+	#If 0 < trial < 8
 	if((s.name < 8) and (0 < s.name)):
+		#delete the last 4 els from list
 		del styleList[5:9]
+		#replace with green background color instead
 		styleList = styleList + ['background-color: #C6E0B4']*4
 	return styleList
 
-#Highlights a Dataframe row based on the behavior of that row
+#Returns a list of highlight colors for the Decision Time Dataframe
+#based on the behavior of that row. This is applied to each row of thre DF in style.apply()
 def highlightDecisionTimeDF(s):
-	#Highlight row based on behavior
+	#2 orange rows always for approach
 	styleList = ['color: #C65911']*2
 
 	match str(s.EventBehavior):

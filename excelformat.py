@@ -8,7 +8,7 @@ from helperfunctions import highlightBehaviorDF, highlightDecisionTimeDF
 from createBehaviorDF import createBehaviorDF
 from createDecisionTimeDF import createDecisionTimeDF
 
-#must pip install: pandas, tkinter, and jinja2
+#must pip install: pandas, tkinter, openpyxl and jinja2
 #or pip install -r requirements.txt
 
 # ====== user selection window ====== #

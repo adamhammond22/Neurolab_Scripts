@@ -1,9 +1,11 @@
-#This stores test and correct sense that we're testing for
+#This stores the sense we're testing for, and the correct sense for the test
 class SensesObject:
 	def __init__(self, testing, correct):
 			self.testing = testing
 			self.correct = correct
-#This stores current behavior like digging, approached, and sense
+
+#This stores current behavior to be passed to dig_correctness()
+#stores what side mouse approached, and trial number
 class BehaviorObject:
 	def __init__(self, Approached, trial):
 			self.Approached = Approached
@@ -21,7 +23,7 @@ class BehaviorStatsObject:
 		self.id = 0
 
 
-#This stores simple counts of all decision times, for statistics
+#This stores simple counts of all decision time behaviors, for statistics
 class DecisionStatsObject:
 	def __init__(self):
 		self.cd = 0

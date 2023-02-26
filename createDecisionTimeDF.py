@@ -14,10 +14,10 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 	ApproachTime = "" #Time it took to approach
 
 
-	#Obj to pass to correctness function with approach direction and trial
+	#Obj to pass to dig_correctness() function. Holds approach direction and trial
 	mouse = BehaviorObject("", 0)
 	
-	#Obj holding statistics for n counts
+	#Obj holding counts of CD, ID, CR, Miss, for statistics line
 	stats = DecisionStatsObject();
 
 	#Iterate through our Behavior DF
@@ -60,36 +60,44 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 						timeTaken, "", timeTaken,"",""]
 			hasApproached = False
 
-		#If mause has not approached, look for an approach
+		#If mouse has not approached, look for an approach
 		else:
 
 			if Behavior == "ApproachRight":
 				hasApproached = True
+				#Track whether it's right or left
 				mouse.Approached = Behavior
+				#Track time of approach
 				ApproachTime = row["Time"]
 
 			elif Behavior == "ApproachLeft":
 				hasApproached = True
+				#Track whether it's right or left
 				mouse.Approached = Behavior
+				#Track time of approach
 				ApproachTime = row["Time"]
 
-	#Compute Statistics and save them
+	#Compute Statistics in a list and save them
+	#Avg statistics list
 	avgLine = ['']*3 + ['Average', '', "{0:.3f}".format(pd.to_numeric(DecisionTimeDF['All']).mean()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Correct Dig']).mean()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Incorrect Dig']).mean()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Correct Rejection']).mean()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Miss']).mean())]
+	#Standard Dev statistics list	
 	stdLine = ['']*3 + ['StDev', '', "{0:.3f}".format(pd.to_numeric(DecisionTimeDF['All']).std()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Correct Dig']).std()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Incorrect Dig']).std()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Correct Rejection']).std()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Miss']).std())]
+	#Counts of each one (this is staved in the stats structure)
 	countsLine = ['']*3 + ['Total', '',stats.cd+stats.id+stats.cr+stats.ms,
 		stats.cd, stats.id, stats.cr, stats.ms]
 
-	#Add all statistics
+
+	#Blank line for spacing
 	DecisionTimeDF.loc[len(DecisionTimeDF)] = ['']*10
-	#Print Average Stats
+	#Add all statistics lists onto the dataframe
 	DecisionTimeDF.loc[len(DecisionTimeDF)] = avgLine
 	DecisionTimeDF.loc[len(DecisionTimeDF)] = stdLine
 	DecisionTimeDF.loc[len(DecisionTimeDF)] = countsLine
