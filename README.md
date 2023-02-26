@@ -8,17 +8,17 @@ reguarding the projects.
 
 ## Files:
 
-1-excelformat.py              | Main program to run. Usage is documented below.
-                              |
-2-createBehaviorDF.py         | Function to create the behavior dataframe. Converted to excel in main
-                              |
-3-createDecisionTimeDF.py     | Function to create the decision time dataframe. Converted to excel in main
-                              |
-4-helperfunctions.py          | Holds all helper functions to format digs, determine dig correctness, 
-                              | 	and highlight dataframe rows accordingly.
-5-classes.py                  | Holds all objects or 'classes' which store simple counts for statistics,
-                              |		or current senses / behavior to pass to functions
-6-requirements.txt            | Stores all python libraries for which this program is dependant on.
+1 - excelformat.py - Main program to run. Usage is documented below.
+
+2 - createBehaviorDF.py -  Function to create the behavior dataframe. Converted to excel in main
+
+3 - createDecisionTimeDF.py - Function to create the decision time dataframe. Converted to excel in main
+
+4 - helperfunctions.py -  Holds all helper functions to format digs, determine dig correctness, and highlight dataframe rows accordingly.
+
+5 - classes.py - Holds all objects or 'classes' which store simple counts for statistics, or current senses / behavior to pass to functions
+
+6 - requirements.txt - Stores all python libraries for which this program is dependant on.
 
 ## First Time Installation:
 
