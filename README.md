@@ -111,6 +111,8 @@ Formats said file to specificaion. Outputs to file ScriptOutput.xlsx
 ### To Do:
 
 [ ] Implement a graphing utility
+	
 [ ] More statistics!
+	
 [ ] make python auto-download required libraries for ease of use: maybe a .bat file?
 
