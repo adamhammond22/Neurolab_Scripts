@@ -24,10 +24,12 @@ reguarding the projects.
 
 ### Windows:
 1 - Download Python 3.10 from the Microsoft Store.
-	: (Any version starting with a 3.<something> will probably work)
+: (Any version starting with a 3.<something> will probably work)
 
 2 - Download all program files 'Neurolab_Scripts-main'and store them on local computer.
-	: (By clicking 'Code'->'Download Zip' on github)
+
+(By clicking 'Code'->'Download Zip' on github)
+
 
 3 - Unzip 'Neurolab_Scripts-main' if it's zipped.
 	: (By right clicking on it -> 'Extract All' -> 'Extract' button)
@@ -41,7 +43,8 @@ reguarding the projects.
 	: (You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
 5 - Enter 'python3 -m pip install -r requirements.txt'
-	: (This should tell python's package manager pip to recursively install all the dependancies in requirements.txt)
+
+(This should tell python's package manager pip to recursively install all the dependancies in requirements.txt)
 
 If this is completed sucessfully, you should be able to simply run the program from here on out
 
@@ -50,9 +53,9 @@ If this is completed sucessfully, you should be able to simply run the program f
 
 1 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
 
-	: (By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
-	: (Replace <path/to/folder> with actual filepath)
-	: (You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
+(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
+(Replace <path/to/folder> with actual filepath)
+(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
 2 - Run "python3 excelformat.py" in cmd prompt or powershell
 
