@@ -24,7 +24,9 @@ reguarding the projects.
 
 ### Windows:
 1 - Download Python 3.10 from the Microsoft Store.
-: (Any version starting with a 3.<something> will probably work)
+
+(Any version starting with a 3.<something> will probably work)
+
 
 2 - Download all program files 'Neurolab_Scripts-main'and store them on local computer.
 
@@ -32,21 +34,30 @@ reguarding the projects.
 
 
 3 - Unzip 'Neurolab_Scripts-main' if it's zipped.
-	: (By right clicking on it -> 'Extract All' -> 'Extract' button)
+
+(By right clicking on it -> 'Extract All' -> 'Extract' button)
+
 
 3 - Open Windows Command Prompt or Powershell
-	: (By going to windows search bar and typing 'cmd' or 'pow', they should pop up)
+
+(By going to windows search bar and typing 'cmd' or 'pow', they should pop up)
+
 
 4 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
-	: (By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
-	: (Replace <path/to/folder> with actual filepath)
-	: (You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
+
+(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
+
+(Replace <path/to/folder> with actual filepath)
+
+(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
+
 
 5 - Enter 'python3 -m pip install -r requirements.txt'
 
 (This should tell python's package manager pip to recursively install all the dependancies in requirements.txt)
 
 If this is completed sucessfully, you should be able to simply run the program from here on out
+
 
 ## Running excelformat.py
 ### Windows:
@@ -57,11 +68,13 @@ If this is completed sucessfully, you should be able to simply run the program f
 (Replace <path/to/folder> with actual filepath)
 (You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
+
 2 - Run "python3 excelformat.py" in cmd prompt or powershell
 
 
 Upon running, excelformat.py prompts user for  single .xlsx file with sheets "Raw" and "Setup".
 Formats said file to specificaion. Outputs to file ScriptOutput.xlsx
+
 
 ### Common Errors:
 
@@ -93,9 +106,14 @@ Formats said file to specificaion. Outputs to file ScriptOutput.xlsx
 
 
 ### To Do:
+
 [ ] regex to file names for raw and setup. maybe make 100_something?
+
 [ ] algorithmically calculate and display correct and incorrect digs 
+
 [ ] remove duplicate incorrect digs (only count first and last)
+
 [ ] calculate avg, std, other statistics
+
 [ ] make python auto-download required libraries for ease of use: maybe a .bat file?
 
