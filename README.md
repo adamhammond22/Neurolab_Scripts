@@ -10,6 +10,8 @@ If you have questions, issues, or feedback reguarding my work, feel free to reac
 
 ## Files:
 
+The list of files in this project.
+
 1 - excelformat.py - Main program to run. Usage is documented below.
 
 2 - createBehaviorDF.py -  Function to create the behavior dataframe. Converted to excel in main
