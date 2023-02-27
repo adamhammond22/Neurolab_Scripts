@@ -85,3 +85,21 @@ def highlightDecisionTimeDF(s):
 			styleList =  ['color: black'] * len(s)
 
 	return styleList
+
+#Returns a list of highlight colors for the Dig Eat Dataframe
+#based on the behavior of that row. This is applied to each row of thre DF in style.apply()
+def highlightDigEatDF(s):
+
+	styleList = []
+	match str(s.DigBehavior):
+		#Color the first 2 cells based on dig
+		case "CorrectDig":
+			styleList = ['color: #FF0000']*2
+		case "IncorrectDig":
+			styleList = ['color: #548235']*2
+		case _:
+			styleList =  ['color: black'] * 2
+
+	#All other cells are black
+	styleList = styleList + ['color: black']*(len(s)-2)
+	return styleList

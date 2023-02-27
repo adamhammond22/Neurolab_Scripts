@@ -30,3 +30,5 @@ class DecisionStatsObject:
 		self.id = 0
 		self.cr = 0
 		self.ms = 0
+
+

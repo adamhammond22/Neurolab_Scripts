@@ -90,7 +90,7 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Incorrect Dig']).std()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Correct Rejection']).std()),
 		"{0:.3f}".format(pd.to_numeric(DecisionTimeDF['Miss']).std())]
-	#Counts of each one (this is staved in the stats structure)
+	#Counts of each one (this is saved in the stats structure)
 	countsLine = ['']*3 + ['Total', '',stats.cd+stats.id+stats.cr+stats.ms,
 		stats.cd, stats.id, stats.cr, stats.ms]
 
