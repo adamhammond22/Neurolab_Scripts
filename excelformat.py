@@ -27,8 +27,13 @@ root.withdraw() #Hide root window
 filepath = filedialog.askopenfilename()
 
 
-# ========== Try finding sheet names ========== #
+# ========== Ensure path is to a .xlsx file ========== #
 
+if not re.search(".xlsx$", str(filepath)):
+	print("Please specify a .xlsx file.")
+	exit()
+
+# ========== Try finding sheet names ========== #
 #Try opening the excel file
 try:
 	excelFile = pd.ExcelFile(filepath)
