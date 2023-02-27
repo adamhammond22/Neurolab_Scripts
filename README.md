@@ -6,6 +6,8 @@ This is a personal Repo for projects to assist a Neuroscience lab.
 It will comprise of python scripts using the pandas library, in order to format and form statistics
 reguarding the projects.
 
+If you have questions, issues, or feedback reguarding my work, feel free to reach out to me at abhammond22@gmail.com! :)
+
 ## Files:
 
 1 - excelformat.py - Main program to run. Usage is documented below.
@@ -24,6 +26,9 @@ reguarding the projects.
 
 
 ## First Time Installation:
+
+How to install the program and it's dependancies for the first time.
+
 
 ### Windows:
 1 - Download Python 3.10 from the Microsoft Store.
@@ -63,6 +68,9 @@ If this is completed sucessfully, you should be able to simply run the program f
 
 
 ## Running excelformat.py
+	
+How to run the program.
+	
 ### Windows:
 
 1 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
@@ -79,18 +87,60 @@ Upon running, excelformat.py prompts user for  single .xlsx file with sheets "Ra
 Formats said file to specificaion. Outputs to file ScriptOutput.xlsx
 
 
+## Using excelformat.py
+	
+How to run the program is indended to be used.
+
+The program takes for input: 1 .xlsx Excel file.
+
+	This file requires 2 Sheets: 
+	
+	1 - "RAW" sheet of raw boris data with AT LEAST columns "Behavioral category", "Behavior type", and "Time". These columns need to be named EXACTLY THIS!
+	
+	2 - "SETUP" sheet of manually imputted data about the test. The program needs to know what texture / odor is correct, and which side the correct sense is on, in order to determine correctness of Digs, Leaves, etc. It must have columns "L_Texture","L_Odor","R_Texture","R_Odor","Trial", "CorrTexture","CorrOdor". The columns need to be named EXACTLY THIS!
+
+The upon running, the program will initiate a file selection window.
+	
+The program outputs 1 .xlsx File named ScriptOutput.xlsx, in the same directory as the program.
+	
+	This file contains:
+	
+	1 - Raw sheet from input file
+	
+	2 - Setup sheet from input file
+	
+	3 - Behavior sheet
+	
+	4 - Decision Time sheet
+	
+	5 - Dig-eat sheet
+
 ### Common Errors:
 
+#### "Pandas could not read file <filepath>"
+	
+	Pandas either couldn't find the file specified in filepath, or something is wrong with pandas.
+	If filepath is correct, check that the Pandas library is installed.
+	
+	
+#### "Program could not find a sheet named 'Raw'"
+	
+	Make sure excel data sheet is named something like "raw", "rAw", "RaW", "RAW", etc.
+
+#### "Program could not find a sheet named 'Setup'"
+	
+	Make sure excel data sheet is named something like "setup", "seTUp", "SETUP", etc.
+	
 #### "Pandas could not open file <filepath>.xlsx with sheet 'Raw'" 
 
 	Script failed to open this file with the sheet named 'Raw', check filepath and sheet name.
-	If filepath and sheetname are correct, check that ther Pandas library is installed
+	If filepath and sheetname are correct, check that the Pandas library is installed
 
 
 #### "Pandas could not open file <filepath>.xlsx with sheet 'Setup'" 
 
 	Script failed to open this file with the sheet named 'Setup', check filepath and sheet name.
-	If filepath and sheetname are correct, check that ther Pandas library is installed
+	If filepath and sheetname are correct, check that the Pandas library is installed
 
 
 #### "PermissionError: [errno 13] Permission denied: 'ScriptOutput.xlsx'"
