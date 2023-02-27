@@ -164,6 +164,8 @@ The program outputs 1 .xlsx File named ScriptOutput.xlsx, in the same directory 
 
 ### To Do:
 
+[ ] ERROR CHECKING: ONLY 1 set of DIGS PER TRIAL
+
 [ ] Implement a graphing utility
 	
 [ ] More statistics!
