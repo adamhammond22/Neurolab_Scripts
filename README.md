@@ -35,38 +35,40 @@ How to install the program and it's dependancies for the first time.
 ### Windows:
 1 - Download Python 3.10 from the Microsoft Store.
 
-(Any version starting with a 3.<something> will probably work)
+	(Any version starting with a 3.<something> will probably work)
 
 
 2 - Download all program files 'Neurolab_Scripts-main'and store them on local computer.
 
-(By clicking 'Code'->'Download Zip' on github)
+	(By clicking 'Code'->'Download Zip' on github)
 
 
 3 - Unzip 'Neurolab_Scripts-main' if it's zipped.
 
-(By right clicking on it -> 'Extract All' -> 'Extract' button)
+	(By right clicking on it -> 'Extract All' -> 'Extract' button)
 
 
 3 - Open Windows Command Prompt or Powershell
 
-(By going to windows search bar and typing 'cmd' or 'pow', they should pop up)
+	(By going to windows search bar and typing 'cmd' or 'pow', they should pop up)
 
 
 4 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
 
-(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
+	(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
 
-(Replace <path/to/folder> with actual filepath)
+	(Replace <path/to/folder> with actual filepath)
 
-(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
+	(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
 
 5 - Enter 'python3 -m pip install -r requirements.txt'
 
-(This should tell python's package manager pip to recursively install all the dependancies in requirements.txt)
+	(This should tell python's package manager pip to recursively install all the dependancies in requirements.txt)
+	
+	If it stops after 10 seconds hit enter a couple times, it's finished when "<filepath>/Neuro_Scripts-main>" returns
 
-If this is completed sucessfully, you should be able to simply run the program from here on out
+	If this is completed sucessfully, you should be able to simply run the program from here on out
 
 
 ## Running excelformat.py
