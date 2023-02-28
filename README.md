@@ -163,6 +163,9 @@ The program outputs 1 .xlsx File named ScriptOutput.xlsx, in the same directory 
 
 
 ### To Do:
+[ ] Behavior DF sometimes fails to concatenate (correctly computed) stats onto the existing df. Looking into using merge(), or adding a bunch of series
+
+[ ] Add documentation on removing headers and footers from xl files which produce a benign error message when run with program
 
 [ ] ERROR CHECKING: ONLY 1 set of DIGS PER TRIAL
 
