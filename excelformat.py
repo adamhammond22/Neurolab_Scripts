@@ -26,6 +26,15 @@ root.withdraw() #Hide root window
 #Filepath Determined by tk dialog
 filepath = filedialog.askopenfilename()
 
+#find filename by splitting by / and taking last one
+#we will use this in order to name our output
+filename = filepath.split('/')[-1]
+
+print("Beginning analysis for " + filename)
+
+#remove last 5 chars '.xlsx', we add the file extension later
+filename = filename[:-5]
+
 
 # ========== Ensure path is to a .xlsx file ========== #
 
@@ -135,7 +144,11 @@ except Exception as err:
 # ========== CREATE Behavior DF ========== #
 
 BehaviorDF = createBehaviorDF(RawDF, SetupDF, senses)
-
+print('missing rows yet?')
+print(BehaviorDF.iloc[4])
+print(BehaviorDF.iloc[5])
+print('bdf cols')
+print(BehaviorDF.columns)
 
 # ========== CREATE Behavior 4D DF ========== #
 
@@ -154,7 +167,7 @@ DecisionTimeDF = DecisionTimeDF.style.apply(highlightDecisionTimeDF, axis=1)
 DigEatDF = DigEatDF.style.apply(highlightDigEatDF, axis=1)
 
 # ========== Write dataframes back into excel sheet ========== #
-Output_Filename = 'ScriptOutput.xlsx'
+Output_Filename = filename + '_ScriptOutput.xlsx'
 with pd.ExcelWriter(Output_Filename) as writer:
 	RawDF.to_excel(writer, sheet_name='Raw', index=False);
 	SetupDF.to_excel(writer, sheet_name='Setup', index=False);
