@@ -96,9 +96,11 @@ Here are the steps to install this program's dependancies.
 
 2 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
 
-(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
-(Replace <path/to/folder> with actual filepath)
-(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
+	(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
+	
+	(Replace <path/to/folder> with actual filepath)
+	
+	(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
 
 3 - Run "python3 excelformat.py" in cmd prompt or powershell
