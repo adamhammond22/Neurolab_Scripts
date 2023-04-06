@@ -30,7 +30,8 @@ The list of files in this project.
 
 ## Getting Python and downloading this Repository:
 
-####For Windows:
+#### For Windows:
+
 1 - Download Python 3.10 from the Microsoft Store.
 
 	(Any version starting with a 3.<something> will probably work)
@@ -54,7 +55,7 @@ To automatically start the program I used a windows batchfile.
 
 It checks for a correct python version as well as depenancies every time it's run, so no setup is needed.
 
-Simply navigate to the directory of the script and open "startExcelFormat.bat"
+	Simply navigate to the directory of the script and open "startExcelFormat.bat"
 
 ### Manual Usage:
 
