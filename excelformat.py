@@ -144,11 +144,7 @@ except Exception as err:
 # ========== CREATE Behavior DF ========== #
 
 BehaviorDF = createBehaviorDF(RawDF, SetupDF, senses)
-print('missing rows yet?')
-print(BehaviorDF.iloc[4])
-print(BehaviorDF.iloc[5])
-print('bdf cols')
-print(BehaviorDF.columns)
+
 
 # ========== CREATE Behavior 4D DF ========== #
 

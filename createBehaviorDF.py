@@ -80,7 +80,7 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 	
 	#Drop all of our tracked duplicate dig indices
 	BehaviorDF = BehaviorDF.drop(labels=drop_indices, axis=0)
-	
+
 	# ========== Add basic statistics to Behavior Sheet ========== #
 	stats = pd.concat([pd.Series([""]),
 		pd.Series(["","TrialStart","ApproachRight","ApproachLeft",
@@ -90,9 +90,8 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 		pd.Series(["","","Approach","","Dig"]),
 		pd.Series(["","",(stats.l+stats.r),"",(stats.cd+stats.id)])],
 	 		axis=1)
-	#stats.rename(columns={0: "",1: "NamesA",2: "StatsA",3:"NamesB", 4:"StatsB"}, inplace=True)
-	#stats.rename(columns={3: "",1: ""}, inplace=True)
+
 	BehaviorDF = pd.concat([BehaviorDF, stats], axis=1)
-	
+
 
 	return BehaviorDF
