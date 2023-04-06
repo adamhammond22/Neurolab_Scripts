@@ -177,7 +177,7 @@ The program outputs 1 .xlsx File named <Original_File_Name>ScriptOutput.xlsx, in
 
 
 ### To Do:
-[ ] Behavior DF very rarely fails to concatenate (correctly computed) stats onto the existing df. Looking into using merge(), or adding a bunch of series
+[ ] Behavior DF has an incredibly rare failure where it fails to concatenate (correctly computed) stats onto the existing df. I am ignoring this unless it happens twice. If so I should Look into using merge(), or adding a bunch of series
 
 [ ] ERROR CHECKING: ONLY 1 set of DIGS PER TRIAL
 
@@ -185,5 +185,5 @@ The program outputs 1 .xlsx File named <Original_File_Name>ScriptOutput.xlsx, in
 	
 [ ] More statistics!
 	
-[ ] make python auto-download required libraries for ease of use: maybe a .bat file?
+[ ] both ways of running the program assume the default windows execution alias of "python3". This is incredibly limiting and may cause problems in the future
 
