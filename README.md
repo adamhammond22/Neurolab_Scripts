@@ -27,12 +27,10 @@ The list of files in this project.
 7 - LICENSE - GNU General Public License v3. Anyone is allowed to use it for free, it can be redistributed as long as I get credit and it's made free.
 
 
-## First Time Installation:
 
-How to install the program and it's dependancies for the first time.
+## Getting Python and downloading this Repository:
 
-
-### Windows:
+####For Windows:
 1 - Download Python 3.10 from the Microsoft Store.
 
 	(Any version starting with a 3.<something> will probably work)
@@ -48,12 +46,30 @@ How to install the program and it's dependancies for the first time.
 	(By right clicking on it -> 'Extract All' -> 'Extract' button)
 
 
-3 - Open Windows Command Prompt or Powershell
+## Running the Program:
+
+### Automatic Usage:
+
+To automatically start the program I used a windows batchfile.
+
+It checks for a correct python version as well as depenancies every time it's run, so no setup is needed.
+
+Simply navigate to the directory of the script and open "startExcelFormat.bat"
+
+### Manual Usage:
+
+Requires a first time setup if you have not used this on this computer before.
+
+#### First time Setup:
+
+Here are the steps to install this program's dependancies.
+
+1 - Open Windows Command Prompt or Powershell
 
 	(By going to windows search bar and typing 'cmd' or 'pow', they should pop up)
 
 
-4 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
+2 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
 
 	(By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
 
@@ -62,7 +78,7 @@ How to install the program and it's dependancies for the first time.
 	(You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
 
-5 - Enter 'python3 -m pip install -r requirements.txt'
+3 - Enter 'python3 -m pip install -r requirements.txt'
 
 	(This should tell python's package manager pip to recursively install all the dependancies in requirements.txt)
 	
@@ -71,27 +87,23 @@ How to install the program and it's dependancies for the first time.
 	If this is completed sucessfully, you should be able to simply run the program from here on out
 
 
-## Running excelformat.py
-	
-How to run the program.
-	
-### Windows:
+#### Running Program Manually:
 
-1 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
+1 - Open Windows Command Prompt or Powershell
+
+	(By going to windows search bar and typing 'cmd' or 'pow', they should pop up)
+
+2 - Change Directory in the Command Prompt or Powershell to the unzipped 'Neurolab_Scripts-main' folder.
 
 (By typing 'cd <path/to/folder>/Neurolab_Scripts-main')
 (Replace <path/to/folder> with actual filepath)
 (You know you're in the correct directory if you enter 'dir' and it prints the files inside the Neurolab_Scripts-main folder)
 
 
-2 - Run "python3 excelformat.py" in cmd prompt or powershell
+3 - Run "python3 excelformat.py" in cmd prompt or powershell
 
 
-Upon running, excelformat.py prompts user for  single .xlsx file with sheets "Raw" and "Setup".
-Formats said file to specificaion. Outputs to file ScriptOutput.xlsx
-
-
-## Using excelformat.py
+## Using the Program:
 	
 How to run the program is indended to be used.
 
@@ -103,9 +115,8 @@ The program takes for input: 1 .xlsx Excel file.
 	
 	2 - "SETUP" sheet of manually imputted data about the test. The program needs to know what texture / odor is correct, and which side the correct sense is on, in order to determine correctness of Digs, Leaves, etc. It must have columns "L_Texture","L_Odor","R_Texture","R_Odor","Trial", "CorrTexture","CorrOdor". The columns need to be named EXACTLY THIS!
 
-The upon running, the program will initiate a file selection window.
 	
-The program outputs 1 .xlsx File named ScriptOutput.xlsx, in the same directory as the program.
+The program outputs 1 .xlsx File named <Original_File_Name>ScriptOutput.xlsx, in the same directory as the program.
 	
 	This file contains:
 	
