@@ -4,10 +4,13 @@ from tkinter import filedialog
 import re #regex
 
 from classes import SensesObject
-from helperfunctions import highlightBehaviorDF, highlightDecisionTimeDF, highlightDigEatDF
+from helperfunctions import highlightBehaviorDF, highlightDecisionTimeDF, highlightDigEatDF, handleFileOpen
 from createBehaviorDF import createBehaviorDF
 from createDecisionTimeDF import createDecisionTimeDF
 from createDigEatDF import createDigEatDF
+
+required_setup_columns = {"L_Texture","L_Odor","R_Texture","R_Odor","Trial","CorrTexture","CorrOdor"}
+required_raw_columns = {"Behavior","Behavior type","Time"}
 
 #must pip install: pandas, tkinter, openpyxl and jinja2
 #or pip install -r requirements.txt
@@ -26,91 +29,24 @@ root.withdraw() #Hide root window
 #Filepath Determined by tk dialog
 filepath = filedialog.askopenfilename()
 
-#find filename by splitting by / and taking last one
-#we will use this in order to name our output
-filename = filepath.split('/')[-1]
+# Open the file and extract raw and setup Dataframes as well as the filename (not the path)
+(RawDF, SetupDF, filename, directoryPath) = handleFileOpen(filepath)
 
-print("Beginning analysis for " + filename)
+# ===== Verify Setup and Raw contain needed columns of data ===== #
 
-#remove last 5 chars '.xlsx', we add the file extension later
-filename = filename[:-5]
-
-
-# ========== Ensure path is to a .xlsx file ========== #
-
-if not re.search(".xlsx$", str(filepath)):
-	print("Please specify a .xlsx file.")
-	exit()
-
-# ========== Try finding sheet names ========== #
-#Try opening the excel file
-try:
-	excelFile = pd.ExcelFile(filepath)
-except Exception as err:
-	print("Pandas could not read file '"+ filepath)
-	print(f"Unexpected {err=}, {type(err)=}")
-	exit()
-
-rawName = ''
-setupName = ''
-#Iterate through sheet names
-for sheetName in excelFile.sheet_names:
-
-	#Search for a sheet named RAW, raw, rAw, etc
-	if re.search("^[rR][aA][wW]$", str(sheetName)):
-		rawName = sheetName
-	#Search for a sheet named SETUP, setup, Setup, etc
-	elif re.search("^[sS][eE][tT][uU][pP]$", str(sheetName)):
-		setupName = sheetName
-
-#Check that we've found proper sheet names for raw and setup
-if(rawName == ''):
-	print("Program could not find a sheet named 'Raw'")
-	exit()
-if(setupName == ''):
-	print("Program could not find a sheet named 'Setup'")
-	exit()	
-
-
-# ========== Try reading found sheets into dataframes ========== #
-if not filepath:
-	print("No file given")
-	exit()
-#Try reading raw sheet into a dataframe
-try:
-	RawDF = pd.read_excel(filepath, rawName)
-except Exception as err:
-	print("Pandas could not open file '"+ filepath +"' with sheet " + rawName)
-	print(f"Unexpected {err=}, {type(err)=}")
-	exit()
-
-#Try reading setup sheet into a dataframe
-try:
-	#keep_default_na is nessecary to make sure n/as are not coverted to something unexpected
-	SetupDF = pd.read_excel(filepath, setupName, keep_default_na=False)
-except Exception as err:
-	print("Pandas could not open file '"+ filepath +"' with sheet " + setupName)
-	print(f"Unexpected {err=}, {type(err)=}")
-	exit()
-
-
-# ===== Verify Setup and Raw contain needed columns ===== #
-
+setup_cols_set = set(SetupDF.columns.tolist())
 #Checking Setup
-required_cols = {"L_Texture","L_Odor","R_Texture","R_Odor","Trial",
-		"CorrTexture","CorrOdor"}
-if not (required_cols.issubset(required_cols)):
+if not (required_setup_columns.issubset(setup_cols_set)):
 	print("Fatal Error: Unexpected Setup Column Names")
-	print("Expected Columns:" + str(expected_cols))
-	print("But recieved columns:" + str(cols))
+	print("Expected Columns:" + str(required_setup_columns))
+	print("But recieved columns:" + str(SetupDF.columns))
 
 #Checking Raw
-cols = set(RawDF.columns)
-required_cols = {"Behavior","Behavior type","Time"}
-if not (required_cols.issubset(required_cols)):
+raw_cols_set = set(RawDF.columns.tolist())
+if not (required_raw_columns.issubset(raw_cols_set)):
 	print("Fatal Error: cannot find needed Raw Columns")
-	print("Needed Columns:" + str(required_cols))
-	print("But recieved columns:" + str(cols))
+	print("Needed Columns:" + str(required_raw_columns))
+	print("But recieved columns:" + str(SetupDF.columns))
 
 # ===== Verify that Setup and Raw have same number of trials ===== #
 
@@ -121,7 +57,7 @@ setupTrials = SetupDF.loc[SetupDF["Trial"].idxmax()]
 
 #compare them 
 if(len(trows) != setupTrials["Trial"]):
-	print("Fatal Error: Setup Trials and Raw 't' count do not match.")
+	print("\nSanity Check Error: Setup Trials and Raw 't' count do not match.")
 	exit()
 
 # ========== CREATE Sense Object ========== #
@@ -136,7 +72,7 @@ try:
 	else:
 		senses = SensesObject("texture", CorrTexture)
 except Exception as err:
-	print("Fatal Error: Failed parsing CorrTexture or CorrOdor in 'Setup' sheet.")
+	print("\nFatal Error: Failed parsing CorrTexture or CorrOdor in 'Setup' sheet.")
 	print(f"Unexpected {err=}, {type(err)=}")
 	exit()
 
@@ -162,9 +98,12 @@ BehaviorDF = BehaviorDF.style.apply(highlightBehaviorDF, axis=1)
 DecisionTimeDF = DecisionTimeDF.style.apply(highlightDecisionTimeDF, axis=1)
 DigEatDF = DigEatDF.style.apply(highlightDigEatDF, axis=1)
 
+
 # ========== Write dataframes back into excel sheet ========== #
 Output_Filename = filename + '_ScriptOutput.xlsx'
-with pd.ExcelWriter(Output_Filename) as writer:
+Output_Filepath = directoryPath + "/" + Output_Filename
+
+with pd.ExcelWriter(Output_Filepath) as writer:
 	RawDF.to_excel(writer, sheet_name='Raw', index=False);
 	SetupDF.to_excel(writer, sheet_name='Setup', index=False);
 	BehaviorDF.to_excel(writer, sheet_name='Behavior', index=False);
@@ -172,4 +111,5 @@ with pd.ExcelWriter(Output_Filename) as writer:
 	DigEatDF.to_excel(writer, sheet_name='Dig-eat', index=False);
 	#Add more sheets to write here!
 
-print("Program Completed. Outputted to file " + Output_Filename)
+print("\nProgram Completed. Outputted to file " + Output_Filename +
+      " in path " + Output_Filepath)

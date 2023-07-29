@@ -18,7 +18,7 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 	mouse = BehaviorObject("", 0)
 	
 	#Obj holding counts of CD, ID, CR, Miss, for statistics line
-	stats = DecisionStatsObject();
+	stats = DecisionStatsObject()
 
 	#Iterate through our Behavior DF
 	for index, row in BehaviorDF.iterrows():

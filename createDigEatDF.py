@@ -16,7 +16,7 @@ def createDigEatDF(BehaviorDF):
 
 	
 	#we can just use the Decision obj because it has CD and ID.
-	stats = DecisionStatsObject();
+	stats = DecisionStatsObject()
 
 	#Iterate through our Behavior DF
 	for index, row in BehaviorDF.iterrows():
