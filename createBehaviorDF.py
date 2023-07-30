@@ -20,7 +20,7 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 	#Obj to pass to correctness function with approach direction and trial
 	mouse = BehaviorObject("", 0)
 	isDigging = False
-	stats = BehaviorStatsObject();
+	stats = BehaviorStatsObject()
 	
 	#Iterate over all rows in Raw Dataframe
 	for index, row in RawDF.iterrows():
