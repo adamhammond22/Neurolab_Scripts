@@ -43,6 +43,7 @@ def dig_correctness(df, mouse, sense):
 #Returns a list of highlight colors for the Behavior Dataframe
 #based on the behavior of that row. This is applied to each row of thre DF in style.apply()
 def highlightBehaviorDF(s):
+	stat_box_length = 9
 	#Highlight row based on behavior
 	match s.Behavior:
 		case "TrialStart":
@@ -55,12 +56,14 @@ def highlightBehaviorDF(s):
 			styleList =  ['color: #FF0000'] * (len(s)-1) + ['color: black']
 		case "IncorrectDig":
 			styleList =  ['color: #548235'] * (len(s)-1) + ['color: black']
+		case "MissDig":
+			styleList =  ['color: #548235'] * (len(s)-1) + ['color: black']
 		case _:
 			styleList =  ['color: black'] * len(s)
 	
 	#Add Green highlight to stats box
-	#If 0 < trial < 8
-	if((s.name < 8) and (0 < s.name)):
+	#If 0 < trial < stat_box_length
+	if((s.name < stat_box_length) and (0 < s.name)):
 		#delete the last 4 els from list
 		del styleList[5:9]
 		#replace with green background color instead

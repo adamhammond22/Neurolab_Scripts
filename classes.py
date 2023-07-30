@@ -21,6 +21,7 @@ class BehaviorStatsObject:
 		self.e = 0
 		self.cd = 0
 		self.id = 0
+		self.md = 0 #missed dig
 
 
 #This stores simple counts of all decision time behaviors, for statistics

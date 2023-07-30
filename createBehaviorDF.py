@@ -45,8 +45,8 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 				#If we were just digging, we need to check the setup to determine
 				if isDigging:
 					if (dig_correctness(SetupDF, mouse, senses)):
-						drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "CorrectDig"))
-						stats.cd += 1
+						drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "MissDig"))
+						stats.md += 1
 					else:
 						drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "IncorrectDig"))
 						stats.id += 1
@@ -84,9 +84,9 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 	# ========== Add basic statistics to Behavior Sheet ========== #
 	stats = pd.concat([pd.Series([""]),
 		pd.Series(["","TrialStart","ApproachRight","ApproachLeft",
-		"CorrectDig","IncorrectDig","Eat","Leave"]),
+		"CorrectDig","IncorrectDig","Eat","Leave", "MissDig"]),
 		pd.Series(["", stats.t, stats.r, stats.l, stats.cd,
-			stats.id, (stats.e//2), stats.v]),
+			stats.id, (stats.e//2), stats.v, stats.md]),
 		pd.Series(["","","Approach","","Dig"]),
 		pd.Series(["","",(stats.l+stats.r),"",(stats.cd+stats.id)])],
 	 		axis=1)
