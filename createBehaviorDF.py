@@ -14,12 +14,9 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 	dig_row_indices = [] #List of indices from most recent digs
 	drop_indices = [] # List of all indices to drop
 
-	
-	#print("testing for " + str(senses.testing) +  " correct:" + str(senses.correct))
-	
+		
 	#Obj to pass to correctness function with approach direction and trial
-	mouse = BehaviorObject("", 0)
-	isDigging = False
+	mouse = BehaviorObject(0)
 	stats = BehaviorStatsObject()
 	
 	#Iterate over all rows in Raw Dataframe
@@ -34,46 +31,46 @@ def createBehaviorDF(RawDF, SetupDF, senses):
 			case "l":
 				stats.l += 1
 				behavior = "ApproachLeft"
-				mouse.Approached = behavior
+				mouse.approachDirection = behavior
 			case "r":
 				stats.r += 1
 				behavior = "ApproachRight"
-				mouse.Approached = behavior
+				mouse.approachDirection = behavior
 			case "v":
 				stats.v += 1
 				behavior = "Leave"
 				#If we were just digging, we need to check the setup to determine
-				if isDigging:
+				if mouse.isDigging:
 					if (dig_correctness(SetupDF, mouse, senses)):
 						drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "MissDig"))
 						stats.md += 1
 					else:
 						drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "IncorrectDig"))
 						stats.id += 1
-					isDigging = False
+					mouse.isDigging = False
 					dig_row_indices = []
 			case "e":
 				stats.e += 1
 				behavior = "Eat"
 				#If we were just digging, label all prev digs as correct
-				if isDigging:
+				if mouse.isDigging:
 					#format our digs, adding extras to the drop list
 					drop_indices.extend(formatDigs(BehaviorDF, dig_row_indices, "CorrectDig"))
 					stats.cd += 1
 					#Reset digging status and indices
-					isDigging = False
+					mouse.isDigging = False
 					dig_row_indices = []
 			case "d":
 				#We cannot label digs as correct or incorrect until we hit 'e' or 'v'.
 				#Mark placeholder, and update digging status + indices.
-				if not isDigging:
-					isDigging = True
-				dig_row_indices.append(index);
+				if not mouse.isDigging:
+					mouse.isDigging = True
+				dig_row_indices.append(index)
 				behavior = "DigPlaceholder"
-			case _:
+			case other:
 				#Default case: just print the undefined behavior and warn the user
-				behavior = rawBehavior;
-				print("Warning: Undefined Behavior"+ t +" encountered at index "+ index)
+				behavior = rawBehavior
+				print("Warning: Undefined Behavior"+ other +" encountered at index "+ index)
 	
 		#Append the new row of formatted data to Behavior Dataframe
 		BehaviorDF.loc[len(BehaviorDF)] = [str(row["Time"]), behavior, row["Behavior type"], str(mouse.trial)]

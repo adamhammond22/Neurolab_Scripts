@@ -7,9 +7,12 @@ class SensesObject:
 #This stores current behavior to be passed to dig_correctness()
 #stores what side mouse approached, and trial number
 class BehaviorObject:
-	def __init__(self, Approached, trial):
-			self.Approached = Approached
+	def __init__(self, trial):
+			self.hasApproached = False
+			self.approachDirection = ""
 			self.trial = trial
+			self.approachTime = ""
+			self.isDigging = False
 
 #This stores simple counts of all behaviors, for statistics
 class BehaviorStatsObject:

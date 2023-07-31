@@ -1,6 +1,8 @@
 import re # import regular expression library
 import pandas as pd
 
+# ============================ Dig Logic Functions ================================ #
+
 #Formats first and last given row indices within Dataframe, at column "Behavior" with given label
 #Returns list of indices to drop (only keeping the first and last dig indices)
 def formatDigs(df, indices, label):
@@ -34,11 +36,16 @@ def dig_correctness(df, mouse, sense):
 	#If Left sense is the correct sense
 	if(CurrentLeftSense == sense.correct):
 		#return true if we approached left
-		return bool(mouse.Approached == "ApproachLeft")
+		return bool(mouse.approachDirection == "ApproachLeft")
 	#If Right sense is the correct sense
 	else:
 		#return true if we approached right
-		return bool(mouse.Approached == "ApproachRight")
+		return bool(mouse.approachDirection == "ApproachRight")
+
+
+
+
+# ============================ Highlighting Helper Functions ================================ #
 
 #Returns a list of highlight colors for the Behavior Dataframe
 #based on the behavior of that row. This is applied to each row of thre DF in style.apply()
@@ -57,7 +64,7 @@ def highlightBehaviorDF(s):
 		case "IncorrectDig":
 			styleList =  ['color: #548235'] * (len(s)-1) + ['color: black']
 		case "MissDig":
-			styleList =  ['color: #548235'] * (len(s)-1) + ['color: black']
+			styleList =  ['color: #a12eb0'] * (len(s)-1) + ['color: black']
 		case _:
 			styleList =  ['color: black'] * len(s)
 	
@@ -111,6 +118,10 @@ def highlightDigEatDF(s):
 	return styleList
 
 
+
+
+# ======================================== FileIO Helper Functions =================================== #
+
 # This function takes the specified filepath, and attemps to open the file and extract the relevant sheets into dataframes
 # The function is looking for a sheet named raw or setup (in any case) in a .xlsx file
 # Takes: a string representing a filepath
@@ -119,7 +130,7 @@ def handleFileOpen(filepath = ""):
 
 	# ensure some filename was given 
 	if (filepath == ""):
-		print("\nFile Open Error: No file given")
+		print("\nNo File Given: Terminating")
 		exit()
 
 	#find filename by splitting by / and taking last one we will use this in order to name our output
@@ -207,3 +218,29 @@ def stripSpaces(text):
     if isinstance(text, str):
         return text.strip()
     return text
+
+
+# ===================================== Statistics Helper Functions =================================== #
+
+# Calculates Std, Mean, and Median for a series
+
+def calcSeriesStd(series: pd.core.series.Series):
+	try:
+		return "{0:.3f}".format(pd.to_numeric(series).std())
+	except Exception as e:
+		return "n/a"
+
+def calcSeriesMean(series: pd.core.series.Series):
+	try:
+		return "{0:.3f}".format(pd.to_numeric(series).mean())
+	except Exception as e:
+		return "n/a"
+
+def calcSeriesMedian(series: pd.core.series.Series):
+	try:
+		return "{0:.3f}".format(pd.to_numeric(series).median())
+	except Exception as e:
+		return "n/a"
+# ===================================================================================================== #
+
+

@@ -1,5 +1,6 @@
 import pandas as pd
 from classes import DecisionStatsObject
+from helperfunctions import calcSeriesStd, calcSeriesMean
 #must pip install: pandas, tkinter, and jinja2
 
 
@@ -63,13 +64,19 @@ def createDigEatDF(BehaviorDF):
 
 	#Compute Statistics in a list and save them
 	#Avg statistics list
-	avgLine = ['']*3 + ['Average', '', "{0:.3f}".format(pd.to_numeric(DigEatDF['Delta-Time']).mean()),
-		"{0:.3f}".format(pd.to_numeric(DigEatDF['CD-Eat Time']).mean()),
-		"{0:.3f}".format(pd.to_numeric(DigEatDF['ID-Leave Time']).mean())]
+	avgLine = ['']*3 + [
+    	'Average',
+    	'',
+     	calcSeriesMean(DigEatDF['Delta-Time']),
+		calcSeriesMean(DigEatDF['CD-Eat Time']),
+		calcSeriesMean(DigEatDF['ID-Leave Time'])]
 	#Standard Dev statistics list	
-	stdLine = ['']*3 + ['StDev', '', "{0:.3f}".format(pd.to_numeric(DigEatDF['Delta-Time']).std()),
-		"{0:.3f}".format(pd.to_numeric(DigEatDF['CD-Eat Time']).std()),
-		"{0:.3f}".format(pd.to_numeric(DigEatDF['ID-Leave Time']).std())]
+	stdLine = ['']*3 + [
+     	'StDev',
+      	'',
+       	calcSeriesStd(DigEatDF['Delta-Time']),
+		calcSeriesStd(DigEatDF['CD-Eat Time']),
+		calcSeriesStd(DigEatDF['ID-Leave Time'])]
 	#Counts of each one (this is saved in the stats structure)
 	countsLine = ['']*3 + ['Total', '',stats.cd+stats.id,
 		stats.cd, stats.id]

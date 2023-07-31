@@ -4,7 +4,7 @@
 ::ASSUMES the DEFAULT execution alias of "python3" is setup in windows.
 @echo off
 cls
-echo Beginning.
+echo Beginning excelformat Slow Start:
 echo.
 
 ::set local so errorlevel is set EACH iteration!
@@ -14,7 +14,7 @@ setlocal ENABLEDELAYEDEXPANSION
 SET /A a=0
 
 ::  ==== Check for Python Installation ==== 
-echo Checking Python version.
+echo Checking Python version...
 python --version | find "Python 3" >NUL 2>NUL
 
 :: if Python 3 not found, it's a bad python version
@@ -42,7 +42,7 @@ goto launch
 
 :: ==== Install Reqs ====
 :installReqs
-echo Pip detected a lacking requirement package. Attempting to install requirements.txt.
+echo Pip detected a lacking requirement package. Attempting to install requirements.txt ...
 python3 -m pip install -r requirements.txt
 
 ::If this is the first iteration(a=0), retry check reqs. otherwise (a=1) we give up
@@ -52,8 +52,6 @@ if !a! == 0 (SET /A a=1 & goto checkReqs) else (goto reqInstallFail)
 :: ==== Launch python script ==== 
 :launch
 echo Launching excelformat.
-echo.
-echo.
 python3 excelformat.py
 goto end
 
@@ -75,6 +73,7 @@ goto end
 
 :: ==== End of Script ==== 
 :end
+echo.
 echo.
 echo.
 echo Press any button to close this window...
