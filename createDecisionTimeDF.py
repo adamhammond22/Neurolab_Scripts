@@ -4,11 +4,13 @@ from classes import SensesObject, DecisionStatsObject, BehaviorObject
 import warnings
 #must pip install: pandas, tkinter, and jinja2
 
+# The number of "last correct" digs to show
+NumberOfLastCorrectToShow = 6
 
 def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 	#Initalize output dataframe for "Behavior" sheet
 	DecisionTimeDF = pd.DataFrame(columns=["ApproachTime","ApproachBehavior","EventTime","EventBehavior",
-		"Trial","All","Correct Dig","Incorrect Dig","Correct Rejection","Miss", "Last Correct", "Last Incorrect"
+		"Trial","All","Correct Dig","Incorrect Dig","Correct Rejection","Miss", "Last Correct", "Last Incorrect", "Last Correct Digs"
 	])
 
 	# Obj to pass to dig_correctness() function. As well as to generally track what the mouse's behavior is
@@ -18,9 +20,13 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 	#Obj holding counts of CD, ID, CR, Miss, for statistics line
 	stats = DecisionStatsObject()
 
-	# Initalize last correct variables
+	# Initalize 
+	totalTrials = int(senses.totalTrials)
+ 
+ 	# Initalize last correct variables
 	lastCorrectString = ""
 	lastIncorrectString = ""
+	lastCorrectDigsString = ""
 	lastDigCorrect = None
 
 	#Iterate through our Behavior DF
@@ -41,18 +47,19 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 						stats.cr += 1
 						DecisionTimeDF.loc[len(DecisionTimeDF)] = [mouse.approachTime,
 							mouse.approachDirection, str(row["Time"]), "LeaveCR", str(row["Trial"]),
-							timeTaken, "", "",timeTaken,"","",""]	
+							timeTaken, "", "",timeTaken,"","","",""]	
 
 					else:
 						#If the mouse left even though the dig was correct, it's a miss
 						stats.ms += 1
 						DecisionTimeDF.loc[len(DecisionTimeDF)] = [mouse.approachTime,
 							mouse.approachDirection, str(row["Time"]), "Miss", str(row["Trial"]),
-							timeTaken, "", "","",timeTaken,"",""]
+							timeTaken, "", "","",timeTaken,"","",""]
 
 				case "CorrectDig":
 					stats.cd += 1
 
+     				# ========== Last Correct Logic ========== #
 					# If the last dig was correct, put the time taken in the last correct string
 					if (lastDigCorrect == True):
 						lastCorrectString = timeTaken
@@ -64,9 +71,16 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 					# Set the lastDigCorrect variable for future use
 					lastDigCorrect = True
 
+					# ========== Last Correct Digs Logic ========== #
+					if((totalTrials - int(row["Trial"])) <= NumberOfLastCorrectToShow):
+						lastCorrectDigsString = timeTaken
+					else:
+						lastCorrectDigsString = ""
+     
 					DecisionTimeDF.loc[len(DecisionTimeDF)] = [mouse.approachTime,
 						mouse.approachDirection, str(row["Time"]), Behavior, str(row["Trial"]),
-						timeTaken, timeTaken, "","","",lastCorrectString, lastIncorrectString]
+						timeTaken, timeTaken, "","","",lastCorrectString, lastIncorrectString, lastCorrectDigsString]
+					
 
 
 				case "IncorrectDig":
@@ -85,14 +99,14 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 
 					DecisionTimeDF.loc[len(DecisionTimeDF)] = [mouse.approachTime,
 						mouse.approachDirection, str(row["Time"]), Behavior, str(row["Trial"]),
-						timeTaken, "", timeTaken,"","",lastCorrectString, lastIncorrectString]
+						timeTaken, "", timeTaken,"","",lastCorrectString, lastIncorrectString, ""]
 
 				case "MissDig":
 						#If the mouse left after a correct dig (meaning it didnt eat), that's also a miss
 						stats.ms += 1
 						DecisionTimeDF.loc[len(DecisionTimeDF)] = [mouse.approachTime,
 							mouse.approachDirection, str(row["Time"]), "Miss", str(row["Trial"]),
-							timeTaken, "", "","",timeTaken,"",""]
+							timeTaken, "", "","",timeTaken,"","", ""]
 
 			mouse.hasApproached = False
 
@@ -128,7 +142,8 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 			calcSeriesMean(DecisionTimeDF['Correct Rejection']),
 			calcSeriesMean(DecisionTimeDF['Miss']),
 			calcSeriesMean(DecisionTimeDF['Last Correct']),
-			calcSeriesMean(DecisionTimeDF['Last Incorrect'])]
+			calcSeriesMean(DecisionTimeDF['Last Incorrect']),
+			calcSeriesMean(DecisionTimeDF['Last Correct Digs'])]
 		#Standard Dev statistics list	
 		stdLine = ['']*3 + ['StDev', '', "{0:.3f}".format(pd.to_numeric(DecisionTimeDF['All']).std()),
 			calcSeriesStd(DecisionTimeDF['Correct Dig']),
@@ -136,7 +151,8 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 			calcSeriesStd(DecisionTimeDF['Correct Rejection']),
 			calcSeriesStd(DecisionTimeDF['Miss']),
 			calcSeriesStd(DecisionTimeDF['Last Correct']),
-			calcSeriesStd(DecisionTimeDF['Last Incorrect'])]
+			calcSeriesStd(DecisionTimeDF['Last Incorrect']),
+			calcSeriesStd(DecisionTimeDF['Last Correct Digs'])]
 		#Counts of each one (this is saved in the stats structure)
 
 		medianLine = ['']*3 + ['Median', '', "{0:.3f}".format(pd.to_numeric(DecisionTimeDF['All']).median()),
@@ -145,15 +161,16 @@ def createDecisionTimeDF(BehaviorDF, SetupDF, senses):
 			calcSeriesMedian(DecisionTimeDF['Correct Rejection']),
 			calcSeriesMedian(DecisionTimeDF['Miss']),
 			calcSeriesMedian(DecisionTimeDF['Last Correct']),
-			calcSeriesMedian(DecisionTimeDF['Last Incorrect'])]
+			calcSeriesMedian(DecisionTimeDF['Last Incorrect']),
+			calcSeriesMedian(DecisionTimeDF['Last Correct Digs'])]
 		#Counts of each one (this is saved in the stats structure)
 
 		countsLine = ['']*3 + ['Total', '',stats.cd+stats.id+stats.cr+stats.ms,
-			stats.cd, stats.id, stats.cr, stats.ms] + ['']*2
+			stats.cd, stats.id, stats.cr, stats.ms] + ['']*3
 
 
 		#Blank line for spacing
-		DecisionTimeDF.loc[len(DecisionTimeDF)] = ['']*12
+		DecisionTimeDF.loc[len(DecisionTimeDF)] = ['']*13
 		#Add all statistics lists onto the dataframe
 		DecisionTimeDF.loc[len(DecisionTimeDF)] = avgLine
 		DecisionTimeDF.loc[len(DecisionTimeDF)] = stdLine

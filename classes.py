@@ -1,8 +1,9 @@
-#This stores the sense we're testing for, and the correct sense for the test
+#This stores the sense we're testing for, the correct sense for the test, the total trials
 class SensesObject:
-	def __init__(self, testing, correct):
+	def __init__(self, testing, correct, totalTrials):
 			self.testing = testing
 			self.correct = correct
+			self.totalTrials = totalTrials
 
 #This stores current behavior to be passed to dig_correctness()
 #stores what side mouse approached, and trial number

@@ -76,10 +76,10 @@ while(popupWindow.restartProgram):
 		CorrTexture = SetupDF.at[0, "CorrTexture"]
 		#If CorrTexture is n/a, then we're testing for odor
 		if (re.search("^[nN]/*[aA]$", str(CorrTexture))):
-			senses = SensesObject("odor", SetupDF.at[0, "CorrOdor"])
+			senses = SensesObject("odor", SetupDF.at[0, "CorrOdor"], setupTrials["Trial"])
 		#Otherwise we're testing for texture
 		else:
-			senses = SensesObject("texture", CorrTexture)
+			senses = SensesObject("texture", CorrTexture, setupTrials["Trial"])
 	except Exception as err:
 		print("\nFatal Error: Failed parsing CorrTexture or CorrOdor in 'Setup' sheet.")
 		print(f"Unexpected {err=}, {type(err)=}")
